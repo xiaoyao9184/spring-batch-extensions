@@ -43,6 +43,8 @@ public abstract class AbstractExcelItemReader<T> extends AbstractItemCountingIte
     private Resource resource;
     private int linesToSkip = 0;
     private int currentSheet = 0;
+    private int maxSheet = -1;
+    protected int rowForColumnCount = 0;
     private RowMapper<T> rowMapper;
     private RowCallbackHandler skippedRowsCallback;
     private boolean noInput = false;
@@ -74,7 +76,14 @@ public abstract class AbstractExcelItemReader<T> extends AbstractItemCountingIte
             }
         } else {
             this.currentSheet++;
-            if (this.currentSheet >= this.getNumberOfSheets()) {
+            if (this.maxSheet != -1 && this.currentSheet > this.maxSheet) {
+                if (this.logger.isDebugEnabled()) {
+                    this.logger.debug("Can't accept more sheets than " + this.maxSheet +
+                            " in '" + this.resource.getDescription() + "'.");
+                }
+
+                return null;
+            }else if (this.currentSheet >= this.getNumberOfSheets()) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("No more sheets in '" + this.resource.getDescription() + "'.");
                 }
@@ -214,5 +223,29 @@ public abstract class AbstractExcelItemReader<T> extends AbstractItemCountingIte
      */
     public void setSkippedRowsCallback(final RowCallbackHandler skippedRowsCallback) {
         this.skippedRowsCallback = skippedRowsCallback;
+    }
+
+    /**
+     * Set the number of sheet for start.
+     * @param currentSheet number of sheet to start
+     */
+    public void setCurrentSheet(int currentSheet) {
+        this.currentSheet = currentSheet;
+    }
+
+    /**
+     * Set the max number of sheet for read.
+     * @param maxSheet max number of sheet for read
+     */
+    public void setMaxSheet(int maxSheet) {
+        this.maxSheet = maxSheet;
+    }
+
+    /**
+     * Set the row number for determine the number of columns.
+     * @param rowForColumnCount row number for determine the number of columns
+     */
+    public void setRowForColumnCount(int rowForColumnCount) {
+        this.rowForColumnCount = rowForColumnCount;
     }
 }

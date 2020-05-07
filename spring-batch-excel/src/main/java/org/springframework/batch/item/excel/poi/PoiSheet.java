@@ -41,6 +41,8 @@ public class PoiSheet implements Sheet {
     private int numberOfColumns = -1;
     private FormulaEvaluator evaluator;
 
+    private int rowForColumnCount = 0;
+
     /**
      * Constructor which takes the delegate sheet.
      *
@@ -51,6 +53,20 @@ public class PoiSheet implements Sheet {
         this.delegate = delegate;
         this.numberOfRows = this.delegate.getLastRowNum() + 1;
         this.name=this.delegate.getSheetName();
+    }
+
+    /**
+     * Constructor which takes the delegate sheet
+     *
+     * @param delegate the apache POI sheet
+     * @param rowForColumnCount row number for determine the number of columns
+     */
+    PoiSheet(org.apache.poi.ss.usermodel.Sheet delegate, int rowForColumnCount) {
+        super();
+        this.delegate = delegate;
+        this.numberOfRows = this.delegate.getLastRowNum() + 1;
+        this.name = this.delegate.getSheetName();
+        this.rowForColumnCount = rowForColumnCount;
     }
 
     /**
@@ -121,7 +137,7 @@ public class PoiSheet implements Sheet {
     @Override
     public int getNumberOfColumns() {
         if (numberOfColumns < 0) {
-            numberOfColumns = this.delegate.getRow(0).getLastCellNum();
+            numberOfColumns = this.delegate.getRow(this.rowForColumnCount).getLastCellNum();
         }
         return numberOfColumns;
     }
