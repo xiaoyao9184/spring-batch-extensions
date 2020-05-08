@@ -1,5 +1,6 @@
 Spring Batch Extensions
 =============================
+[![](https://jitpack.io/v/xiaoyao9184/spring-batch-extensions.svg)](https://jitpack.io/#xiaoyao9184/spring-batch-extensions)
 
 The Spring Batch Extensions project provides extension modules for the [Spring Batch Project][]. This project is part of the [Spring organization][] on GitHub.
 
